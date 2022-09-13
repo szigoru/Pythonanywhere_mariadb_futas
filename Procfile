@@ -1,0 +1,1 @@
+web: gunicorn chartjs_django.wsgi

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+
+  <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+    <button type="button" class="btn btn-danger"><a href="/">Főoldal</a></button>
+  </div>
+<hr>
+
+{% block content %}
+
+<h5>Havi bontás:</h5>
+
+  <div id="container" style="width: 100%;">
+    <canvas id="bar"></canvas>
+  </div>
+
+  <div id="container" style="width: 100%;">
+    <canvas id="bar2"></canvas>
+  </div>
+
+  <div id="container" style="width: 100%;">
+    <canvas id="bar3"></canvas>
+  </div>
+
+  <div id="container" style="width: 100%;">
+    <canvas id="bar4"></canvas>
+  </div>
+
+  <h5>Az utolsó 4 év összevetése:</h5>
+
+  <div id="container" style="width: 100%;">
+    <canvas id="bar5"></canvas>
+  </div>
+
+  <h5>Az idei tempók eloszlása:</h5>
+
+  <div id="container" style="width: 100%;">
+    <canvas id="bar6"></canvas>
+  </div>
+
+  <h5>Az elmúlt 2 év futásai havonta, tempóval</h5>
+
+  <div id="container" style="width: 100%;">
+    <canvas id="bubble"></canvas>
+  </div>
+
+  <h5>Az összes futás a hét napjain</h5>
+
+  <div id="container" style="width: 100%;">
+    <canvas id="napok"></canvas>
+  </div>
+
+  <h5>Az idei futások a hét napjain</h5>
+
+  <div id="container" style="width: 100%;">
+    <canvas id="napok2"></canvas>
+  </div>
+
+  <h5>Az év napjai/lefutott táv/ tempó (minél nagyobb a kör, annál gyorsabb a tempó)</h5>
+
+  <div id="container" style="width: 100%;">
+    <canvas id="napokon"></canvas>
+  </div>
+
+  <h5>Pincében/szabadban lefutott távok</h5>
+
+  <div id="container" style="width: 100%;">
+    <canvas id="pincetav"></canvas>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+  <script>
+  
+
+
+    var config = {
+      type: 'bar',
+      scaleStartValue : 0,
+      data: {
+        datasets: [{
+          data: {{monthly_data_curr_year|safe}},
+          backgroundColor: ['#62bD69', '#62bD69', '#62bD69', '#62bD69', '#62bD69', '#62bD69', '#62bD69', '#62bD69', '#62bD69', '#62bD69', '#62bD69', '#62bD69'],
+          label: {{current_year}}
+        }],
+        labels: {{ labels|safe }}
+      },
+      options: {
+        scales: {
+        yAxes: [{
+            display: true,
+            ticks: {
+                suggestedMin: 0,    // minimum will be 0, unless there is a lower value.
+                // OR //
+                beginAtZero: true   // minimum value will be 0.
+            }
+        }]
+    }
+    }
+    };
+
+    var config2 = {
+      type: 'bar',
+      data: {
+        datasets: [{
+          data: {{monthly_data_last_year|safe}},
+          backgroundColor: ['#F4BB44', '#F4BB44', '#F4BB44', '#F4BB44', '#F4BB44', '#F4BB44', '#F4BB44', '#F4BB44', '#F4BB44', '#F4BB44', '#F4BB44', '#F4BB44'],
+          label: {{last_year}}
+        }],
+        labels: {{ labels|safe }}
+      },
+      options: {
+        responsive: true,
+      }
+    };
+
+    var config3 = {
+      type: 'bar',
+      data: {
+        datasets: [{
+          data: {{ monthly_data_ket_year|safe }},
+          backgroundColor: ['#241571', '#241571', '#241571', '#241571', '#241571', '#241571', '#241571', '#241571', '#241571', '#241571', '#241571', '#241571'],
+          label: {{ketevvelezelottiev}}
+        }],
+        labels: {{ labels|safe }}
+      },
+      options: {
+        responsive: true
+      }
+    };
+
+    var config4 = {
+      type: 'bar',
+      data: {
+        datasets: [{
+          data: {{monthly_data_harom_year|safe }},
+          backgroundColor: ['#900603', '#900603', '#900603', '#900603', '#900603', '#900603', '#900603', '#900603', '#900603', '#900603', '#900603', '#900603'],
+          label: {{harommalezelotti}}
+        }],
+        labels: {{ labels|safe }}
+      },
+      options: {
+        responsive: true
+      }
+    };
+
+    var config5 = {
+      type: 'bar',
+      data: {
+        datasets: [{
+          data: {{monthly_data_harom_year|safe }},
+          backgroundColor: ['#900603', '#900603', '#900603', '#900603', '#900603', '#900603', '#900603', '#900603', '#900603', '#900603', '#900603', '#900603'],
+          label: {{harommalezelotti}}
+        },{
+          data: {{ monthly_data_ket_year|safe }},
+          backgroundColor: ['#241571', '#241571', '#241571', '#241571', '#241571', '#241571', '#241571', '#241571', '#241571', '#241571', '#241571', '#241571'],
+          label: {{ketevvelezelottiev}}
+        },
+        {
+          data: {{ monthly_data_last_year|safe }},
+          backgroundColor: ['#F4BB44', '#F4BB44', '#F4BB44', '#F4BB44', '#F4BB44', '#F4BB44', '#F4BB44', '#F4BB44', '#F4BB44', '#F4BB44', '#F4BB44', '#F4BB44'],
+          label: {{last_year}}
+        },{
+        data: {{ monthly_data_curr_year|safe }},
+          backgroundColor: ['#62bD69', '#62bD69', '#62bD69', '#62bD69', '#62bD69', '#62bD69', '#62bD69', '#62bD69', '#62bD69', '#62bD69', '#62bD69', '#62bD69'],
+          label: {{current_year}}
+        }
+      ],
+        labels: {{ labels|safe }}
+      },
+      options: {
+        responsive: true
+      }
+    };
+
+    var config6 = {
+      type: 'pie',
+      data: {
+        datasets: [{
+          data: {{curr_year_kat|safe }},
+          backgroundColor: ['#003297', '#e81c9a', '#37FD12', '#f26b0a'],
+          label: {{current_year}}
+        }],
+        labels: {{ curr_year_keys|safe }}
+      },
+      options: {
+        responsive: true
+      }
+    };
+
+    var config7 = {
+      type: 'bubble',
+      
+      data: {
+        datasets: [{
+          data: {{newlist|safe}},
+          backgroundColor: 'rgb(255, 99, 132)',
+          label: '2021'
+        },
+        {
+          data: {{newlist1|safe}},
+          backgroundColor: 'rgb(24, 99, 132)',
+          label: '2022'
+        }],
+        
+      },
+      options: {
+        responsive: true
+      }
+    };
+
+    var config8 = {
+      type: 'doughnut',
+      data: {
+        labels: [
+    'Péntek',
+    'Hétfő',
+    'Szombat',
+    'Vasárnap',
+    'Csütörtök',
+    'Kedd',
+    'Szerda'
+  ],
+        datasets: [{
+          data: {{napok_szerint_alltime|safe}},
+          backgroundColor: [
+      'rgb(255, 99, 132)',
+      'rgb(54, 162, 235)',
+      'rgb(255, 205, 86)',
+      'rgb(3, 160, 98)',
+      'rgb(100, 0, 100)',
+      'rgb(64, 64, 64)',
+      'rgb(54, 100, 16)'
+    ],
+          label: 'Napok szerinti bontás'
+        }],
+      },
+      options: {
+        responsive: true
+      }
+    };
+
+
+
+    var config18 = {
+      type: 'doughnut',
+      data: {
+        labels: [
+    'Péntek',
+    'Hétfő',
+    'Szombat',
+    'Vasárnap',
+    'Csütörtök',
+    'Kedd',
+    'Szerda'
+  ],
+        datasets: [{
+          data: {{napok_szerint_curr_year|safe}},
+          backgroundColor: [
+      'rgb(255, 99, 132)',
+      'rgb(54, 162, 235)',
+      'rgb(255, 205, 86)',
+      'rgb(3, 160, 98)',
+      'rgb(100, 0, 100)',
+      'rgb(64, 64, 64)',
+      'rgb(54, 100, 16)'
+    ],
+          label: 'Napok szerinti bontás'
+        }],
+      },
+      options: {
+        responsive: true
+      }
+    };
+
+    var config9 = {
+      type: 'bubble',
+      
+      data: {
+        datasets: [{
+          data: {{scatterlist|safe}},
+          backgroundColor: 'rgb(66, 89, 195)',
+          label: 'Futások megoszlása napok szerint'
+        }],
+      },
+      options: {
+        responsive: true
+      }
+    };
+
+    var config10 = {
+      type: 'bar',
+      data: {
+        datasets: [{
+      
+          data: [{{curr_year_pince_distance}}, {{last_year_pince_distance}}, {{ket_year_pince_distance}}, {{harom_year_pince_distance}}],
+          backgroundColor: ['#e8179b', '#e8179b', '#e8179b', '#e8179b', '#e8179b', '#e8179b', '#e8179b', '#e8179b'],
+          label: 'Futópad'
+        },
+        {
+          
+          data: [{{curr_year_kint_distance}}, {{last_year_kint_distance}}, {{ket_year_kint_distance}}, {{harom_year_kint_distance}}],
+          backgroundColor: ['#402a38', '#402a38', '#402a38', '#402a38', '#402a38', '#402a38', '#402a38', '#402a38'],
+          label: 'Szabadban'
+        },
+        
+        
+        ],
+        labels: [{{current_year}}, {{last_year}}, {{ketevvelezelottiev}}, {{harommalezelottiev}}]
+      },
+      options: {
+        responsive: true,
+        indexAxis: 'y'
+      }
+    };
+
+
+    window.onload = function() {
+      var ctx = document.getElementById('bar').getContext('2d');
+      var ctx2 = document.getElementById('bar2').getContext('2d');
+      var ctx3 = document.getElementById('bar3').getContext('2d');
+      var ctx4 = document.getElementById('bar4').getContext('2d');
+      var ctx5 = document.getElementById('bar5').getContext('2d');
+      var ctx6 = document.getElementById('bar6').getContext('2d');
+      var ctx7 = document.getElementById('bubble').getContext('2d');
+      var ctx8 = document.getElementById('napok').getContext('2d');
+      var ctx18 = document.getElementById('napok2').getContext('2d');
+      var ctx9 = document.getElementById('napokon').getContext('2d');
+      var ctx10 = document.getElementById('pincetav').getContext('2d');
+      window.myPie = new Chart(ctx, config);
+      window.myPie = new Chart(ctx2, config2);
+      window.myPie = new Chart(ctx3, config3);
+      window.myPie = new Chart(ctx4, config4);
+      window.myPie = new Chart(ctx5, config5);
+      window.myPie = new Chart(ctx6, config6);
+      window.myPie = new Chart(ctx7, config7);
+      window.myPie = new Chart(ctx8, config8);
+      window.myPie = new Chart(ctx18, config18);
+      window.myPie = new Chart(ctx9, config9);
+      window.myPie = new Chart(ctx10, config10);
+    };
+
+  </script>
+
+
+{% endblock %}
+       
+
+    </form>
+    
+</body>
+</html>
